@@ -1,5 +1,5 @@
 // Offline support: once the app has been opened, it keeps working without a connection.
-const CACHE = 'backline-v1';
+const CACHE = 'backline-v2';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
