@@ -22,6 +22,12 @@ A full set of percussion instruments for the iPad, played with your fingers. It 
 - **Metronome:** 40 to 240 BPM, 2/4 through 7/4.
 - **Looper:** tap record, play a groove, then tap record again to close the loop. Tap record once more to layer on top. With the metronome on, loops snap to whole bars. A loop keeps playing when you switch kits.
 
+## Solo: one instrument, whole screen
+
+Tap **Solo** at the top to see every instrument on its own, from a single conga or the snare to the full marimba or the handpan. Sets such as congas, bongos, timbales, tabla and timpani are there too. Pick one and it fills the screen with nothing else around it. In Safari on the iPad it also goes properly full screen.
+
+In Solo, the arrows step to the previous or next instrument, **Instruments** opens the list again, and **All kits** takes you back. The app remembers what you were playing the next time you open it.
+
 ## Put it on the iPad
 
 1. In this repository on GitHub, open **Settings → Pages**.
