@@ -113,6 +113,19 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--brass-hi); 
 }
 .lbl i { font-style: normal; font-weight: 500; font-size: .82em; letter-spacing: .08em; opacity: .85; }
 .nolabels .lbl { display: none; }
+.gate {
+  position: absolute; inset: 0; z-index: 5; display: grid; place-content: center; justify-items: center; gap: 16px;
+  padding: 24px max(16px, env(safe-area-inset-right, 0px)) 24px max(16px, env(safe-area-inset-left, 0px));
+  background: rgba(12,9,7,.55); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
+  text-align: center; touch-action: manipulation; cursor: pointer;
+}
+.gate-btn {
+  display: flex; align-items: center; gap: 12px; min-height: 68px; padding: 0 30px; border: 0; border-radius: 999px;
+  background: linear-gradient(#ecc46c, #c58f32); color: #1d140a; font: 700 22px/1 var(--f-ui); letter-spacing: .08em; text-transform: uppercase;
+  box-shadow: 0 14px 34px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.45);
+}
+.gate-btn svg { width: 28px; height: 28px; flex: none; }
+.gate-tip { margin: 0; max-width: 36ch; color: var(--ink); font-size: 15px; line-height: 1.45; text-shadow: 0 1px 3px #000; }
 .ring::after {
   content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
   background: var(--ring-bg, repeating-conic-gradient(from 8deg, #dfe2e6 0 3.5deg, transparent 3.5deg var(--lug, 45deg)));
@@ -447,6 +460,54 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--brass-hi); 
 }
 
 /* ---------- settings sheet ---------- */
+/* ---------- solo: one instrument, whole screen ---------- */
+.solo-btn { width: auto; padding: 0 14px 0 11px; display: flex; align-items: center; gap: 8px; font: 600 15px/1 var(--f-ui); letter-spacing: .1em; text-transform: uppercase; }
+@media (max-width: 700px) { .solo-btn span { display: none; } .solo-btn { width: 44px; padding: 0; justify-content: center; } }
+.soloing .top, .soloing .bot { display: none; }
+.solo-bar {
+  flex: none; display: flex; align-items: center; gap: 8px; min-height: 56px; padding-block: 6px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  background: var(--stage); overflow-x: auto; scrollbar-width: none; touch-action: pan-x; position: relative; z-index: 3;
+}
+.solo-bar::-webkit-scrollbar { display: none; }
+.sb-btn {
+  flex: none; height: 44px; min-width: 44px; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 0 14px;
+  border: 1px solid var(--line); border-radius: 10px; background: #241d18; color: var(--ink);
+  font: 600 15px/1 var(--f-ui); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap;
+}
+.sb-btn.icon { width: 44px; padding: 0; }
+.sb-btn svg { width: 20px; height: 20px; flex: none; }
+.sb-name { flex: 1 1 auto; min-width: 0; padding: 0 6px; font: 800 26px/1 var(--f-display); letter-spacing: .04em; color: var(--brass); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sb-opts { flex: none; display: flex; gap: 6px; }
+@media (max-width: 1000px) { .solo-bar.has-opts .sb-name { display: none; } .solo-bar.has-opts .sb-opts { flex: 1 1 auto; } }
+@media (max-width: 560px) { .sb-btn .txt { display: none; } .sb-btn:has(.txt) { width: 44px; padding: 0; } .sb-name { font-size: 20px; } }
+.picker { position: absolute; inset: 0; z-index: 20; display: flex; flex-direction: column; background: var(--stage); }
+.pk-head {
+  flex: none; display: flex; align-items: center; gap: 12px; min-height: 56px; padding-block: 6px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  background: linear-gradient(var(--panel-2), var(--panel)); border-bottom: 1px solid var(--line);
+}
+.pk-head h2 { flex: 1; min-width: 0; margin: 0; font: 800 26px/1 var(--f-display); letter-spacing: .05em; color: var(--brass); text-wrap: balance; }
+.pk-body {
+  flex: 1; min-height: 0; overflow-y: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; padding-block: 14px 32px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.pk-lead { margin: 0 0 4px; max-width: 60ch; color: var(--ink-dim); font-size: 15px; }
+.pk-kit h3 { margin: 22px 0 10px; font: 700 13px/1 var(--f-ui); letter-spacing: .22em; text-transform: uppercase; color: var(--ink-dim); }
+.pk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 8px; }
+.tile {
+  display: flex; flex-direction: column; align-items: center; gap: 3px; min-height: 140px; padding: 14px 6px 12px;
+  border: 1px solid var(--line); border-radius: 12px; background: #1d1713; color: var(--ink); text-align: center;
+}
+.tile:active { background: #2a221c; }
+.tile[aria-current="true"] { border-color: var(--brass); box-shadow: inset 0 0 0 1px var(--brass); }
+.tile b { margin-top: 10px; font: 600 15px/1.15 var(--f-ui); letter-spacing: .04em; }
+.tile i { font-style: normal; font-size: 12.5px; color: var(--ink-dim); }
+.mini { position: relative; flex: none; width: 64px; height: 64px; pointer-events: none; }
+.mini .pad { box-shadow: 0 3px 8px rgba(0,0,0,.5); }
+.mini .lbl { display: none; }
+.mini .look-bar .face { background: var(--bar); }
+.mini .look-cymbal.open::before { box-shadow: none; }
 .sheet {
   position: absolute; z-index: 10; top: 62px; right: max(12px, env(safe-area-inset-right, 0px));
   width: min(380px, calc(100% - 24px)); max-height: calc(100% - 140px); overflow-y: auto; touch-action: pan-y;
@@ -476,6 +537,10 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--brass-hi); 
   <header class="top">
     <div class="brand" aria-label="Backline Percussion"><b>BACKLINE</b><i>Percussion</i></div>
     <nav class="kits" id="kits" role="tablist" aria-label="Kits"></nav>
+    <button class="icon-btn solo-btn" id="soloBtn" type="button" aria-label="Solo: play one instrument">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.2"/></svg>
+      <span>Solo</span>
+    </button>
     <button class="icon-btn" id="fsBtn" aria-label="Full screen" hidden>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
     </button>
@@ -484,8 +549,24 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--brass-hi); 
     </button>
   </header>
 
+  <div class="solo-bar" id="soloBar" hidden>
+    <button class="sb-btn" id="soloBack" type="button" aria-label="Back to all kits"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg><span class="txt">All kits</span></button>
+    <div class="sb-name" id="soloName"></div>
+    <div class="sb-opts" id="soloOpts" hidden></div>
+    <button class="sb-btn icon" id="soloPrev" type="button" aria-label="Previous instrument"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
+    <button class="sb-btn icon" id="soloNext" type="button" aria-label="Next instrument"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    <button class="sb-btn" id="soloPick" type="button" aria-label="Choose an instrument"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg><span class="txt">Instruments</span></button>
+  </div>
+
   <main class="stage" id="stage" aria-label="Instruments">
     <div class="pads" id="pads"></div>
+    <div class="gate" id="gate">
+      <button class="gate-btn" id="gateBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19.5 5.5a9 9 0 0 1 0 13"/></svg>
+        <span id="gateTitle">Tap to start sound</span>
+      </button>
+      <p class="gate-tip">Still quiet? Open Control Center and make sure the bell isn't crossed out (Silent Mode), then turn the volume up.</p>
+    </div>
   </main>
 
   <footer class="bot" id="bot">
@@ -525,8 +606,18 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--brass-hi); 
     <label class="row"><span>Labels</span><input class="sw" id="labels" type="checkbox"></label>
     <h2 id="howTitle">How to play</h2>
     <ul class="howto" id="howto"></ul>
+    <p class="fine">Tap Solo at the top to play any one instrument full screen.</p>
     <p class="fine">Use several fingers at once. Apple Pencil pressure sets the volume. Looper: tap record, play a groove, tap record again to close the loop, then tap it once more to layer on top. Turn on the metronome first to lock loops to whole bars.</p>
+    <p class="fine">No sound? Turn off Silent Mode in Control Center (the bell icon), turn the volume up, and check that headphones or a Bluetooth speaker aren't connected. If the page is open inside another app, open it in Safari instead.</p>
     <p class="fine">To keep it on the iPad, open this page in Safari, tap Share, then Add to Home Screen.</p>
+  </section>
+
+  <section class="picker" id="picker" role="dialog" aria-label="Choose one instrument" hidden>
+    <div class="pk-head">
+      <h2>Play one instrument</h2>
+      <button class="sb-btn" id="pkClose" type="button">Close</button>
+    </div>
+    <div class="pk-body" id="pkBody"></div>
   </section>
 </div>
 
@@ -1065,8 +1156,8 @@ function malletDef(id, n) {
   }
   return malletDefs[k];
 }
-function malletLayout(W, H) {
-  const id = settings.mallet, start = 60;
+function malletLayout(W, H, kit, which) {
+  const id = which || settings.mallet, start = 60;
   const nNat = clamp(Math.floor(W / 50), 8, 15);
   const nat = [], acc = [];
   for (let m = start; nat.length < nNat; m++) if (!isBlack(m)) nat.push(m);
@@ -1280,20 +1371,61 @@ const KITS = [
 ];
 const kitById = id => KITS.find(k => k.id === id) || KITS[0];
 
+/* ---------- solo catalogue: every instrument, alone ---------- */
+for (const [key, name, sub] of [['drums.kick', 'Kick', '22' + IN], ['drums.hhClosed', 'Closed hat'], ['latin.bongoHi', 'Bongo macho'], ['latin.bongoLo', 'Bongo hembra'],
+  ['latin.agogoHi', 'Agogô high', ''], ['latin.agogoLo', 'Agogô low', ''], ['orchestra.clash', 'Clash cymbals'],
+  ['orchestra.timp1', 'Timpano D2'], ['orchestra.timp2', 'Timpano A2'], ['orchestra.timp3', 'Timpano D3'], ['orchestra.timp4', 'Timpano F3']]) {
+  const [kid, pid] = key.split('.'), d = kitById(kid).pads[pid];
+  d.soloName = name;
+  if (sub !== undefined) d.soloSub = sub;
+}
+// Instruments that are played as a set appear once as the set, then piece by piece.
+const SETS = {
+  drums: [['hihat', 'Hi-hat', ['hhClosed', 'hhOpen'], 'Closed and open']],
+  latin: [['congas', 'Congas', ['quinto', 'conga', 'tumba'], 'Set of three'], ['bongos', 'Bongos', ['bongoHi', 'bongoLo'], 'Pair'],
+    ['timbales', 'Timbales', ['timbHi', 'timbLo'], 'Pair'], ['agogo', 'Agogô', ['agogoHi', 'agogoLo'], 'Two bells']],
+  world: [['tabla', 'Tabla', ['dayan', 'bayan'], 'Pair']],
+  orchestra: [['timpani', 'Timpani', ['timp1', 'timp2', 'timp3', 'timp4'], 'Set of four']],
+};
+const SOLO = [];
+for (const k of KITS) {
+  if (k.id === 'mallets') { for (const [id, m] of Object.entries(MALLET)) SOLO.push({ id: 'mallets.' + id, kit: k, mallet: id, name: m.name, sub: '' }); continue; }
+  if (k.id === 'handpan') { SOLO.push({ id: 'handpan', kit: k, name: 'Handpan', sub: '' }); continue; }
+  const sets = (SETS[k.id] || []).slice();
+  for (const [id, d] of Object.entries(k.pads)) {
+    for (let i = 0; i < sets.length; i++) {
+      if (!sets[i][2].includes(id)) continue;
+      const [sid, name, ids, note] = sets.splice(i--, 1)[0];
+      SOLO.push({ id: k.id + '.' + sid, kit: k, name, ids, note, sub: '' });
+    }
+    SOLO.push({ id: k.id + '.' + id, kit: k, ids: [id], name: d.soloName || d.name, sub: d.soloSub ?? d.sub ?? '' });
+  }
+}
+const soloById = id => SOLO.find(e => e.id === id);
+
 /* ---------- audio bootstrap ---------- */
 let ctx = null, E = null, htmlAudio = null, wakeLock = null;
 function ensureAudio() {
   if (!ctx) {
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return false;
+    setAudioSession();
     try { ctx = new AC({ latencyHint: 'interactive' }); } catch (e) { ctx = new AC(); }
     E = new Engine(ctx, { vol: settings.vol, room: settings.room });
-    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { /* not supported */ }
+    if (ctx.addEventListener) ctx.addEventListener('statechange', updateGate); else ctx.onstatechange = updateGate;
     setInterval(schedule, 25);
   }
-  if (ctx.state !== 'running') { try { ctx.resume(); } catch (e) { /* needs a gesture */ } }
+  if (ctx.state !== 'running') resumeAudio();
   return true;
 }
+function resumeAudio() {
+  try { const r = ctx.resume(); if (r && r.then) r.then(updateGate, () => {}); } catch (e) { /* needs a gesture */ }
+}
+// Ask iOS to treat this page as music, so Silent Mode doesn't mute it.
+function setAudioSession() {
+  try { if (navigator.audioSession && navigator.audioSession.type !== 'playback') navigator.audioSession.type = 'playback'; } catch (e) { /* not supported */ }
+}
+setAudioSession();
 function silentWavURL() {
   const sr = 8000, n = 4000, buf = new ArrayBuffer(44 + n * 2), dv = new DataView(buf);
   const w = (o, s) => { for (let i = 0; i < s.length; i++) dv.setUint8(o + i, s.charCodeAt(i)); };
@@ -1306,22 +1438,40 @@ function silentWavURL() {
 // Audio Session API is missing, plays a silent loop so the iPad's silent mode doesn't mute the kit.
 function unlock() {
   if (!ensureAudio()) return;
-  if (ctx.state !== 'running') ctx.resume().catch(() => {});
-  if (!navigator.audioSession && !htmlAudio) {
-    try { htmlAudio = new Audio(silentWavURL()); htmlAudio.loop = true; htmlAudio.play().catch(() => {}); } catch (e) { /* ignore */ }
-  }
+  setAudioSession();
+  if (ctx.state !== 'running') resumeAudio();
+  // A silent looping <audio> element also moves iOS into its media session. This covers older iOS
+  // and pages shown inside other apps, where the Audio Session API is missing or ignored.
+  try {
+    if (!htmlAudio) { htmlAudio = new Audio(silentWavURL()); htmlAudio.loop = true; htmlAudio.setAttribute('playsinline', ''); }
+    if (htmlAudio.paused) { const r = htmlAudio.play(); if (r && r.catch) r.catch(() => {}); }
+  } catch (e) { /* ignore */ }
   requestWake();
 }
 function requestWake() {
   if (wakeLock || !navigator.wakeLock || document.visibilityState !== 'visible') return;
   navigator.wakeLock.request('screen').then(l => { wakeLock = l; l.addEventListener('release', () => { wakeLock = null; }); }).catch(() => {});
 }
-document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { requestWake(); if (ctx && ctx.state !== 'running') ctx.resume().catch(() => {}); } });
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { requestWake(); if (ctx && ctx.state !== 'running') resumeAudio(); updateGate(); } });
 
 /* ---------- stage: build and draw pads ---------- */
 const stage = $('#stage'), padsEl = $('#pads');
+const gate = $('#gate'), gateTitle = $('#gateTitle');
+const CHIME = { sound: v => { v.tone(659.25, .5, .9, { a: .004 }); v.tone(987.77, .35, .8, { a: .004, d: .11 }); v.tone(1318.5, .1, .5, { d: .11 }); }, gain: .35, tuned: true, send: .3 };
+// Sound can only start from a real tap on iPad, so the stage waits behind this button until audio is running.
+function updateGate() {
+  const on = !!ctx && ctx.state === 'running';
+  gate.hidden = on;
+  if (!on) gateTitle.textContent = ctx ? 'Tap to turn sound back on' : 'Tap to start sound';
+}
+gate.addEventListener('click', () => {
+  unlock();
+  if (E) E.play(CHIME, 'chime', { vel: .9 });
+  setTimeout(updateGate, 250);
+  setTimeout(updateGate, 1000);
+});
 const reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-let kit = kitById(settings.kit), pads = [], padByKey = new Map(), box = null;
+let kit = kitById(settings.kit), solo = null, pads = [], padByKey = new Map(), box = null;
 
 function fitLayout(k, W, H) {
   const L = W / H >= 1 ? k.land : k.port;
@@ -1332,16 +1482,43 @@ function fitLayout(k, W, H) {
     ? { id, shape: 'circle', cx: ox + a[0] * sx, cy: oy + a[1] * sy, r: a[2] * s }
     : { id, shape: 'rect', cx: ox + (a[0] + a[2] / 2) * sx, cy: oy + (a[1] + a[3] / 2) * sy, w: a[2] * s, h: a[3] * s });
 }
+// Lay out a solo entry: one piece fills the screen; a set shares it in the best-fitting grid.
+function packCircles(ids, rel, W, H) {
+  const n = ids.length, rmax = Math.max(...rel);
+  let best = null;
+  for (let cols = 1; cols <= n; cols++) {
+    const rows = Math.ceil(n / cols), cw = W / cols, ch = H / rows, R = Math.min(cw, ch) / 2 * .94;
+    if (!best || R > best.R) best = { cols, rows, cw, ch, R };
+  }
+  const { cols, rows, cw, ch, R } = best, oy = (H - rows * ch) / 2;
+  return ids.map((id, i) => {
+    const row = Math.floor(i / cols), c = i % cols, inRow = Math.min(cols, n - row * cols), ox = (W - inRow * cw) / 2;
+    return { id, shape: 'circle', cx: ox + c * cw + cw / 2, cy: oy + row * ch + ch / 2, r: R * rel[i] / rmax };
+  });
+}
+function soloLayout(en, W, H) {
+  const k = en.kit, tag = g => Object.assign({ kitRef: k }, g);
+  if (!en.ids) return k.layout(W, H, k, en.mallet).map(tag);          // mallets and handpan: the whole instrument
+  const at = k.land ? k.land.at : {};
+  const shapeOf = id => { const a = at[id]; return !a ? { w: 1, h: 1 } : a.length === 3 ? { r: a[2] } : { w: a[2], h: a[3] }; };
+  if (en.ids.length === 1) {
+    const id = en.ids[0], g = shapeOf(id);
+    if (g.r) return [tag({ id, shape: 'circle', cx: W / 2, cy: H / 2, r: Math.min(W, H) / 2 * .94 })];
+    const sc = Math.min(W * .94 / g.w, H * .94 / g.h);
+    return [tag({ id, shape: 'rect', cx: W / 2, cy: H / 2, w: g.w * sc, h: g.h * sc })];
+  }
+  return packCircles(en.ids, en.ids.map(id => shapeOf(id).r || 1), W, H).map(tag);
+}
 function buildPads(animate) {
   box = padsEl.getBoundingClientRect();
   padsEl.textContent = ''; pads = []; padByKey.clear();
   const m = Math.max(10, Math.min(box.width, box.height) * .025), W = box.width - 2 * m, H = box.height - 2 * m;
   if (W < 60 || H < 60) return;
-  const geo = kit.layout ? kit.layout(W, H, kit) : fitLayout(kit, W, H);
-  const mirror = kit.mirror && settings.lefty;
+  const geo = solo ? soloLayout(solo, W, H) : (kit.layout ? kit.layout(W, H, kit) : fitLayout(kit, W, H)).map(g => Object.assign({ kitRef: kit }, g));
+  const mirror = !solo && kit.mirror && settings.lefty;
   for (const g of geo) {
-    const def = g.def || kit.pads[g.id];
-    const P = Object.assign({}, g, { def, key: g.key || kit.id + '.' + g.id });
+    const def = g.def || g.kitRef.pads[g.id];
+    const P = Object.assign({}, g, { def, key: g.key || g.kitRef.id + '.' + g.id });
     P.cx += m; P.cy += m;
     if (mirror) P.cx = box.width - P.cx;
     P.pan = clamp((P.cx / box.width - .5) * 2, -1, 1) * .6;
@@ -1357,7 +1534,7 @@ function makePadEl(P) {
   el.className = 'pad look-' + looks[0] + (looks.length > 1 ? ' ' + looks.slice(1).join(' ') : '') + (P.shape === 'rect' ? ' rect' : '');
   const w = P.shape === 'circle' ? P.r * 2 : P.w, h = P.shape === 'circle' ? P.r * 2 : P.h;
   P.bw = w; P.bh = h;
-  el.style.cssText = `left:${P.cx - w / 2}px;top:${P.cy - h / 2}px;width:${w}px;height:${h}px;--fs:${clamp(Math.min(w, h) * .085, 10, 15).toFixed(1)}px`;
+  el.style.cssText = `left:${P.cx - w / 2}px;top:${P.cy - h / 2}px;width:${w}px;height:${h}px;--fs:${clamp(Math.min(w, h) * .085, 10, solo ? 26 : 15).toFixed(1)}px`;
   if (P.ang != null) el.style.setProperty('--ang', P.ang + 'deg');
   if (d.vars) for (const k in d.vars) el.style.setProperty(k, d.vars[k]);
   el.innerHTML = '<div class="face"></div><div class="glow"></div>' + (d.name ? `<span class="lbl"><b>${d.name}</b>${d.sub ? `<i>${d.sub}</i>` : ''}</span>` : '');
@@ -1448,8 +1625,8 @@ function holdAction(st) {
   const now = ctx.currentTime, def = st.P.def;
   if (def.hold === 'close') {
     E.chokeKey(st.P.key, now, .03);
-    const ped = kit.pads && kit.pads.pedal;
-    if (ped) E.play(ped, kit.id + '.pedal', { vel: .55, d: 0, pan: st.P.pan }, now);
+    const src = st.P.kitRef, ped = src && src.pads && src.pads.pedal;
+    if (ped) E.play(ped, src.id + '.pedal', { vel: .55, d: 0, pan: st.P.pan }, now);
   } else {
     E.chokeKey(st.P.key, now, def.chokeTau || .06);
   }
@@ -1492,14 +1669,15 @@ function up(id) {
   touches.delete(id);
 }
 const hasTouch = 'ontouchstart' in window;
-stage.addEventListener('touchstart', e => { e.preventDefault(); for (const t of e.changedTouches) down('t' + t.identifier, t.clientX, t.clientY, t.force, t.touchType); }, { passive: false });
-stage.addEventListener('touchmove', e => { e.preventDefault(); for (const t of e.changedTouches) move('t' + t.identifier, t.clientX, t.clientY); }, { passive: false });
-const touchEnd = e => { e.preventDefault(); for (const t of e.changedTouches) up('t' + t.identifier); unlock(); };
+const onGate = e => !gate.hidden && gate.contains(e.target);
+stage.addEventListener('touchstart', e => { if (onGate(e)) return; e.preventDefault(); for (const t of e.changedTouches) down('t' + t.identifier, t.clientX, t.clientY, t.force, t.touchType); }, { passive: false });
+stage.addEventListener('touchmove', e => { if (onGate(e)) return; e.preventDefault(); for (const t of e.changedTouches) move('t' + t.identifier, t.clientX, t.clientY); }, { passive: false });
+const touchEnd = e => { if (onGate(e)) return; e.preventDefault(); for (const t of e.changedTouches) up('t' + t.identifier); unlock(); };
 stage.addEventListener('touchend', touchEnd, { passive: false });
 stage.addEventListener('touchcancel', touchEnd, { passive: false });
 const skipPointer = e => e.pointerType === 'touch' || (hasTouch && e.pointerType === 'pen');
 stage.addEventListener('pointerdown', e => {
-  if (skipPointer(e)) return;
+  if (skipPointer(e) || onGate(e)) return;
   unlock();
   try { stage.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
   down('p' + e.pointerId, e.clientX, e.clientY, e.pressure, e.pointerType === 'pen' ? 'stylus' : 'mouse');
@@ -1668,15 +1846,16 @@ function segButtons(items, current, onPick) {
 }
 function malletOptions(box) {
   box.appendChild(segButtons(Object.entries(MALLET).map(([id, m]) => [id, m.short]), settings.mallet, id => { settings.mallet = id; save(); buildPads(true); drawOptions(); }));
-  if (settings.mallet === 'vibes') {
-    const seg = document.createElement('div'); seg.className = 'seg';
-    for (const [key, label] of [['pedal', 'Pedal'], ['motor', 'Motor']]) {
-      const b = document.createElement('button'); b.textContent = label; b.setAttribute('aria-pressed', !!settings[key]);
-      b.addEventListener('click', () => { settings[key] = !settings[key]; b.setAttribute('aria-pressed', settings[key]); save(); });
-      seg.appendChild(b);
-    }
-    box.appendChild(seg);
+  if (settings.mallet === 'vibes') box.appendChild(vibesToggles());
+}
+function vibesToggles() {
+  const seg = document.createElement('div'); seg.className = 'seg';
+  for (const [key, label] of [['pedal', 'Pedal'], ['motor', 'Motor']]) {
+    const b = document.createElement('button'); b.textContent = label; b.setAttribute('aria-pressed', !!settings[key]);
+    b.addEventListener('click', () => { settings[key] = !settings[key]; b.setAttribute('aria-pressed', settings[key]); save(); });
+    seg.appendChild(b);
   }
+  return seg;
 }
 function panOptions(box) {
   box.appendChild(segButtons(Object.entries(PAN_SCALES).map(([id, s]) => [id, s.name]), settings.scale, id => { settings.scale = id; save(); buildPads(true); drawOptions(); }));
@@ -1707,7 +1886,7 @@ const sheet = $('#sheet'), setBtn = $('#setBtn');
 function toggleSheet(open) { sheet.hidden = !open; setBtn.setAttribute('aria-expanded', open); }
 setBtn.addEventListener('click', e => { e.stopPropagation(); toggleSheet(sheet.hidden); });
 document.addEventListener('pointerdown', e => { if (!sheet.hidden && !sheet.contains(e.target) && !setBtn.contains(e.target) && !stage.contains(e.target)) toggleSheet(false); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') toggleSheet(false); });
+document.addEventListener('keydown', e => { if (e.key !== 'Escape') return; if (!picker.hidden) closePicker(); else if (!sheet.hidden) toggleSheet(false); else if (solo) exitSolo(); });
 function bindRange(id, key, apply) {
   const el = $('#' + id); el.value = settings[key];
   el.addEventListener('input', () => { settings[key] = +el.value; apply && apply(); save(); });
@@ -1738,14 +1917,102 @@ if (fsEnabled && !standalone) {
   });
 }
 
+/* ---------- solo mode ---------- */
+const appEl = $('#app'), soloBar = $('#soloBar'), soloNameEl = $('#soloName'), soloOpts = $('#soloOpts'), picker = $('#picker'), pkBody = $('#pkBody');
+let soloFs = false;
+function drawSoloBar() {
+  soloNameEl.textContent = solo.name + (solo.sub ? ' ' + solo.sub : '');
+  soloOpts.innerHTML = '';
+  if (solo.mallet) {
+    soloOpts.appendChild(segButtons(Object.entries(MALLET).map(([id, m]) => [id, m.short]), solo.mallet, id => enterSolo(soloById('mallets.' + id))));
+    if (solo.mallet === 'vibes') soloOpts.appendChild(vibesToggles());
+  } else if (solo.kit.id === 'handpan') {
+    soloOpts.appendChild(segButtons(Object.entries(PAN_SCALES).map(([id, sc]) => [id, sc.name]), settings.scale, id => { settings.scale = id; save(); buildPads(true); drawSoloBar(); }));
+  }
+  soloOpts.hidden = !soloOpts.children.length;
+  soloBar.classList.toggle('has-opts', !soloOpts.hidden);
+}
+// From a tap, also ask the browser for real full screen where it allows it (Safari on iPad does; the Home Screen app already is).
+function goFullscreen() {
+  if (!fsEnabled || standalone || document.fullscreenElement || document.webkitFullscreenElement) return;
+  try {
+    const r = (docEl.requestFullscreen || docEl.webkitRequestFullscreen).call(docEl);
+    soloFs = true;
+    if (r && r.catch) r.catch(() => { soloFs = false; });
+  } catch (e) { soloFs = false; }
+}
+function leaveFullscreen() {
+  if (!soloFs) return;
+  soloFs = false;
+  try { if (document.fullscreenElement || document.webkitFullscreenElement) (document.exitFullscreen || document.webkitExitFullscreen).call(document); } catch (e) { /* ignore */ }
+}
+function enterSolo(en, fromTap) {
+  if (!en) return;
+  solo = en; settings.solo = en.id;
+  if (en.mallet) settings.mallet = en.mallet;
+  save();
+  toggleSheet(false); closePicker();
+  appEl.classList.add('soloing'); soloBar.hidden = false;
+  drawSoloBar(); buildPads(true);
+  if (fromTap) goFullscreen();
+}
+function exitSolo() {
+  const k = solo ? solo.kit : kit;
+  solo = null; settings.solo = null;
+  appEl.classList.remove('soloing'); soloBar.hidden = true;
+  leaveFullscreen();
+  selectKit(k.id);
+}
+function stepSolo(dir) { enterSolo(SOLO[mod(SOLO.indexOf(solo) + dir, SOLO.length)]); }
+function miniFor(en) {
+  const wrap = document.createElement('span'); wrap.className = 'mini';
+  for (const g of soloLayout(en, 64, 64)) wrap.appendChild(makePadEl(Object.assign({}, g, { def: g.def || g.kitRef.pads[g.id] })));
+  return wrap;
+}
+function buildPicker() {
+  pkBody.innerHTML = '<p class="pk-lead">Pick an instrument and it fills the screen. Use the arrows to move to the next one, or All kits to go back.</p>';
+  for (const k of KITS) {
+    const sec = document.createElement('section'); sec.className = 'pk-kit'; sec.dataset.kit = k.id;
+    const h = document.createElement('h3'); h.textContent = k.name; sec.appendChild(h);
+    const grid = document.createElement('div'); grid.className = 'pk-grid';
+    for (const en of SOLO.filter(e => e.kit === k)) {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'tile'; b.dataset.id = en.id;
+      b.appendChild(miniFor(en));
+      const t = document.createElement('b'); t.textContent = en.name; b.appendChild(t);
+      const note = en.note || en.sub;
+      if (note) { const i = document.createElement('i'); i.textContent = note; b.appendChild(i); }
+      b.addEventListener('click', () => enterSolo(en, true));
+      grid.appendChild(b);
+    }
+    sec.appendChild(grid); pkBody.appendChild(sec);
+  }
+}
+let pickerBuilt = false;
+function openPicker() {
+  if (!pickerBuilt) { buildPicker(); pickerBuilt = true; }
+  for (const t of pkBody.querySelectorAll('.tile')) t.setAttribute('aria-current', !!solo && t.dataset.id === solo.id);
+  toggleSheet(false); picker.hidden = false;
+  const target = solo ? pkBody.querySelector(`[data-id="${solo.id}"]`) : pkBody.querySelector(`[data-kit="${kit.id}"]`);
+  pkBody.scrollTop = target ? Math.max(0, target.offsetTop - pkBody.offsetTop - (solo ? pkBody.clientHeight / 3 : 8)) : 0;
+  $('#pkClose').focus({ preventScroll: true });
+}
+function closePicker() { picker.hidden = true; }
+$('#soloBtn').addEventListener('click', openPicker);
+$('#soloPick').addEventListener('click', openPicker);
+$('#pkClose').addEventListener('click', closePicker);
+$('#soloBack').addEventListener('click', exitSolo);
+$('#soloPrev').addEventListener('click', () => stepSolo(-1));
+$('#soloNext').addEventListener('click', () => stepSolo(1));
+
 /* ---------- start ---------- */
 let rq = 0;
 new ResizeObserver(() => { cancelAnimationFrame(rq); rq = requestAnimationFrame(() => { buildPads(false); tabsEdge(); }); }).observe(padsEl);
 window.addEventListener('scroll', () => { box = padsEl.getBoundingClientRect(); }, { passive: true });
-drawTabs(); drawOptions(); drawBeats(); setBpm(settings.bpm); loopUI(); buildPads(false); showTab();
+drawTabs(); drawOptions(); drawBeats(); setBpm(settings.bpm); loopUI(); buildPads(false); showTab(); updateGate();
+if (settings.solo) enterSolo(soloById(settings.solo));
 
 // Exposed for offline sound checks.
-window.__backline = { KITS, Engine, MALLET, malletDef, panDef, PAN_SCALES, S, CLICK, peek: () => ({ ctx, E, L, M, pads }) };
+window.__backline = { KITS, Engine, MALLET, malletDef, panDef, PAN_SCALES, S, CLICK, SOLO, peek: () => ({ ctx, E, L, M, pads, solo }) };
 })();
 </script>
 <!--/app-->
